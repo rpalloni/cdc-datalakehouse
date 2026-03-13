@@ -102,7 +102,7 @@ password
 5 connection properties above
 allowlist warehouse
 ```
-################################################################################################################################################################################
+##################################################################################################################################################################################################
 ### DREMIO NOTEs:
 When you explicitly set a custom region like `eu-central-1` in MinIO, all downstream clients (Nessie and Dremio) must use that same region string.
 This is because the S3 Signature Version 4 (SigV4) signing process uses the region name to generate the cryptographic signature; if there is a mismatch, MinIO will reject the request.
