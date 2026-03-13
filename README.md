@@ -1,5 +1,7 @@
 # cdc pipeline and data lakehouse
 
+<img width="1853" height="480" alt="image" src="https://github.com/user-attachments/assets/852721c8-5492-49f6-9417-1630b7ef901c" />
+
 Postgres > Kafka Connect (Debezium) > Kafka > Kafka Connect > Iceberg + Nessie + Minio <<< Dremio
 
 ## Connectors plugins initial setup 
