@@ -1,13 +1,14 @@
-# datalakehouse
+# cdc pipeline and data lakehouse
 
-Postgres > Kafka Connect (Debezium) > Kafka > Kafka Connect > Iceberg > Minio <<< Dremio
+Postgres > Kafka Connect (Debezium) > Kafka > Kafka Connect > Iceberg + Nessie + Minio <<< Dremio
 
-## Connectors plugins initial setup (only once, takes 20 minutes)
+## Connectors plugins initial setup 
+[only once, takes 20 minutes] \
 Activate docker server and run the scripts to download the connectors JARs in /custom-plugins repo:
-* postgres: build the kafka connect jar files in custom-plugins with `bash debezium-jars-setup.sh` (https://debezium.io/releases/3.3/#installation > downloads > list of all connectors jars)
-* iceberg: build the kafka connect jar files in custom-plugins with `bash iceberg-jars-setup.sh` (docs: https://iceberg.apache.org/docs/latest/kafka-connect/)
+* postgres: build the kafka connect jar files in custom-plugins with `bash scripts/debezium-jars-setup.sh` (https://debezium.io/releases/3.3/#installation > downloads > list of all connectors jars)
+* iceberg: build the kafka connect jar files in custom-plugins with `bash scripts/iceberg-jars-setup.sh` (docs: https://iceberg.apache.org/docs/latest/kafka-connect/)
 
-Once the connector repo is created, download additional nessie jars in `/lib`: \
+Once the connector repo is created, download additional Nessie jars in `/lib`: \
 `cd custom-plugins/iceberg-connector-kafka/iceberg-kafka-connect-runtime-xxxxxxxxxx/lib`
 ```
 curl -sL -o iceberg-nessie-1.7.1.jar https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-nessie/1.7.1/iceberg-nessie-1.7.1.jar
