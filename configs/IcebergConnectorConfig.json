@@ -1,0 +1,71 @@
+{
+  "name": "iceberg-bookings-connector",
+  "config": {
+      "_comment_tasks": "Number of parallel Kafka Connect worker tasks for this connector",
+    "tasks.max": "1",
+
+      "_comment_class": "The Iceberg Sink Connector class that writes Kafka records into Iceberg tables",
+    "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
+
+      "_comment_topics": "Kafka topic to consume from — Debezium produces CDC events here from postgres.public.bookings",
+    "topics": "postgres.public.bookings",
+
+      "_comment_tables": "Target Iceberg table in the form <namespace>.<table>",
+    "iceberg.tables": "db.bookings",
+      "_comment_auto_create": "Automatically create the Iceberg table if it does not exist yet",
+    "iceberg.tables.auto-create-enabled": true,
+      "_comment_evolve_schema": "Automatically add new columns to the Iceberg table when the source schema changes",
+    "iceberg.tables.evolve-schema-enabled": true,
+
+      "_comment_catalog_impl": "Use Nessie as the Iceberg catalog (git-like versioned catalog)",
+    "iceberg.catalog.catalog-impl": "org.apache.iceberg.nessie.NessieCatalog",
+      "_comment_catalog_uri": "Nessie REST API endpoint (v1)",
+    "iceberg.catalog.uri": "http://nessie:19120/api/v1",
+      "_comment_catalog_ref": "Nessie branch to read/write from",
+    "iceberg.catalog.ref": "main",
+      "_comment_warehouse": "Root S3 path where Iceberg data and metadata files are stored",
+    "iceberg.catalog.warehouse": "s3a://warehouse",
+      "_comment_io_impl": "Use the S3 file I/O implementation to read/write Iceberg files",
+    "iceberg.catalog.io-impl": "org.apache.iceberg.aws.s3.S3FileIO",
+      "_comment_s3_endpoint": "MinIO endpoint (S3-compatible object storage)",
+    "iceberg.catalog.s3.endpoint": "http://minio:9000",
+      "_comment_path_style": "Force path-style S3 URLs (required for MinIO, which does not use virtual-hosted-style)",
+    "iceberg.catalog.s3.path-style-access": "true",
+      "_comment_region": "AWS/MinIO region — must match across all clients for SigV4 request signing",
+    "iceberg.catalog.client.region": "eu-central-1",
+      "_comment_access_key": "MinIO access key (equivalent to AWS_ACCESS_KEY_ID)",
+    "iceberg.catalog.s3.access-key-id": "admin",
+      "_comment_secret_key": "MinIO secret key (equivalent to AWS_SECRET_ACCESS_KEY)",
+    "iceberg.catalog.s3.secret-access-key": "password",
+
+      "_comment_key_converter": "Deserialize Kafka message keys as JSON",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "_comment_key_schema": "Expect the key JSON to include an embedded schema envelope (Debezium default)",
+    "key.converter.schemas.enable": "true",
+      "_comment_value_converter": "Deserialize Kafka message values as JSON",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "_comment_value_schema": "Expect the value JSON to include an embedded schema envelope (Debezium default)",
+    "value.converter.schemas.enable": "true",
+
+      "_comment_transforms": "Named list of SMTs (Single Message Transforms) to apply in order",
+    "transforms": "unwrap",
+      "_comment_unwrap_type": "ExtractNewRecordState: strips the Debezium envelope and keeps only the 'after' image of the row",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+      "_comment_tombstones": "Keep tombstone records (deletion marker: null-value messages produced by Debezium for DELETEs) instead of dropping them",
+    "transforms.unwrap.drop.tombstones": "false",
+      "_comment_delete_mode": "drop = discard DELETE events entirely; they will not be written to Iceberg",
+    "transforms.unwrap.delete.handling.mode": "drop",
+
+      "_comment_commit_interval": "How often (ms) the connector commits a new Iceberg snapshot — up to 5s of latency before data is visible",
+    "iceberg.control.commit.interval-ms": "5000",
+
+      "_comment_idempotence": "Disable Kafka producer idempotence (simplifies setup; enable in production for exactly-once guarantees)",
+    "enable.idempotence": "false",
+      "_comment_txn_id": "No transactional producer ID — required when idempotence is disabled",
+    "transactional.id": "",
+      "_comment_exactly_once_source": "Disable exactly-once support on the source side",
+    "exactly.once.source.support": "none",
+      "_comment_exactly_once_sink": "Disable exactly-once support on the sink side",
+    "exactly.once.sink.support": "none"
+  }
+}

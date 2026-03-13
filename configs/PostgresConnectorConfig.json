@@ -1,0 +1,35 @@
+{
+  "name": "postgres-bookings-connector",
+  "config": {
+      "_comment_class": "Debezium connector class for PostgreSQL — reads WAL (Write-Ahead Log) change events",
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+
+      "_comment_hostname": "PostgreSQL host (Docker service name)",
+    "database.hostname": "postgres",
+      "_comment_port": "Default PostgreSQL port",
+    "database.port": "5432",
+      "_comment_user": "PostgreSQL user — must have REPLICATION privilege to read the WAL",
+    "database.user": "docker",
+      "_comment_password": "PostgreSQL user password",
+    "database.password": "docker",
+      "_comment_dbname": "PostgreSQL database to capture changes from",
+    "database.dbname": "bookings",
+
+      "_comment_topic_prefix": "Prefix for all Kafka topics produced by this connector — topics are named <prefix>.<schema>.<table>",
+    "topic.prefix": "postgres",
+
+      "_comment_table_include": "Whitelist of tables to capture in <schema>.<table> format — all other tables are ignored",
+    "table.include.list": "public.bookings",
+
+      "_comment_plugin": "PostgreSQL logical decoding plugin — pgoutput is the built-in plugin (no extension needed), alternative is decoderbufs",
+    "plugin.name": "pgoutput",
+
+      "_comment_time_precision": "Use Kafka Connect logical types for dates/times (org.apache.kafka.connect.data.Date etc.) instead of Debezium-native types (io.debezium.time.Date). Required for downstream connectors (e.g. Iceberg sink) to correctly map DATE columns to Iceberg date type instead of integer.",
+    "time.precision.mode": "connect",
+
+      "_comment_key_converter": "Serialize Kafka message keys as JSON (the primary key of the row)",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "_comment_value_converter": "Serialize Kafka message values as JSON (the full Debezium change event envelope with before/after/op fields)",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter"
+  }
+}
