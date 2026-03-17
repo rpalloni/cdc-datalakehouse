@@ -96,12 +96,13 @@ services:
     container_name: nessie
     ports:
       - 19120:19120
+    user: root # allow storage persist
     environment:
       - NESSIE_CATALOG_SERVICE_S3_REGION=eu-central-1
       - NESSIE_CATALOG_SERVICE_S3_ENDPOINT=http://minio:9000
       - NESSIE_CATALOG_SERVICE_S3_PATH_STYLE_ACCESS=true # path style access enabled: minio:9000/bucket (S3 default to virtual host style: bucket.minio:9000)
-      # - NESSIE_VERSION_STORE_TYPE=ROCKSDB # Persist catalog metadata in RocksDB (file-based) instead of default in-memory storage
-      # - NESSIE_VERSION_STORE_PERSIST_ROCKS_DATABASE_PATH=/nessie/data/rocksdb
+      - NESSIE_VERSION_STORE_TYPE=ROCKSDB # Persist catalog metadata in RocksDB (file-based) instead of default in-memory storage
+      - NESSIE_VERSION_STORE_PERSIST_ROCKS_DATABASE_PATH=/nessie/data
     volumes:
       - nessie_data:/nessie/data  
     networks:
