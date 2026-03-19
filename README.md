@@ -102,7 +102,7 @@ password
 5 connection properties above
 allowlist warehouse
 ```
-##################################################################################################################################################################################################
+###################################################################################################################################################################################################################################################
 ### DREMIO NOTEs:
 When you explicitly set a custom region like `eu-central-1` in MinIO, all downstream clients (Nessie and Dremio) must use that same region string.
 This is because the S3 Signature Version 4 (SigV4) signing process uses the region name to generate the cryptographic signature; if there is a mismatch, MinIO will reject the request.
@@ -139,7 +139,8 @@ SELECT * FROM nessie.db.bookings AT BRANCH dev;
 
 
 ### POSTGRES NOTEs:
-Storage engines represent data on disk and every WRITE is appended to log; this log can be exposed to other systems.
+Storage engines represent data on disk and every WRITE is appended to log; this log can be exposed to other systems. \
+The database pushes to its logs and the ingestion system reads the logs but doesn't interact with the database otherwise. **This adds little to no additional load to the source database** (FoDE p.44).
 
 WAL (Write-Ahead Log) config: \
 `wal_level=logical` enable replication needed by debezium connector for CDC.
